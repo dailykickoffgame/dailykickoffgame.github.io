@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PL Guesser – Daily Football Quiz</title>
+</head>
+
+<body>
+
+<h1>PL Guesser ⚽</h1>
+<p>Guess today's football player</p>
+
+<input id="guess" placeholder="Player name">
+<button onclick="check()">Guess</button>
+
+<p id="result"></p>
+<p id="streak"></p>
+
+<button onclick="share()">Share</button>
+
+<script>
+
+const players = ["messi","ronaldo","haaland","salah"]
+
+const today = new Date().toISOString().slice(0,10)
+let index = today.split("-").join("") % players.length
+const answer = players[index]
+
+let streak = localStorage.getItem("streak") || 0
+let lastPlayed = localStorage.getItem("lastPlayed")
+
+document.getElementById("streak").innerText = "Streak: " + streak
+
+function check(){
+ let input = document.getElementById("guess").value.toLowerCase()
+
+ if(input === answer){
+   document.getElementById("result").innerText = "Correct!"
+
+   if(lastPlayed !== today){
+     streak++
+     localStorage.setItem("streak", streak)
+     localStorage.setItem("lastPlayed", today)
+   }
+ } else {
+   document.getElementById("result").innerText = "Wrong!"
+ }
+}
+
+function share(){
+ navigator.clipboard.writeText("I guessed today's player on DailyKickoff!")
+ alert("Copied!")
+}
+
+</script>
+
+</body>
+</html>

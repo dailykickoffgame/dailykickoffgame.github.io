@@ -1,69 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PL Guesser – Daily Football Quiz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PL Guesser</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #0f172a;
-      color: white;
-      padding: 40px;
-    }
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #0f172a;
+  color: white;
+}
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
+input {
+  padding: 10px;
+  margin-top: 20px;
+}
 
-    #guess {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: none;
-      margin-top: 20px;
-    }
+button {
+  padding: 10px;
+  margin: 10px;
+}
 
-    button {
-      padding: 10px 16px;
-      margin: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-    }
-
-    #streak {
-      margin-top: 10px;
-      font-size: 16px;
-    }
-
-    #timer {
-      margin-top: 30px;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-  </style>
+#timer { margin-top: 20px; }
+</style>
 </head>
 
 <body>
 
 <h1>PL Guesser ⚽</h1>
-<p>Guess today's football player</p>
+<p>Guess today's player</p>
 
 <input id="guess" placeholder="Enter player name">
 <br>
 <button onclick="check()">Guess</button>
 
 <p id="result"></p>
+<p id="attempts"></p>
 <p id="streak"></p>
 
 <button onclick="share()">Share</button>
@@ -72,89 +46,129 @@
 
 <script>
 
-// Daily seed
-function getDailySeed(){
-  const today = new Date().toISOString().slice(0,10)
-  return today.split("-").join("")
-}
-
-// Player data (expand later)
+// DATA
 const players = ["messi","ronaldo","haaland","salah","mbappe","kane","neymar"]
 
-// Daily answer
-const seed = getDailySeed()
-let index = seed % players.length
-const answer = players[index]
-
-// Game state
-let streak = localStorage.getItem("streak") || 0
-let lastPlayed = localStorage.getItem("lastPlayed")
-let today = new Date().toISOString().slice(0,10)
-let guessed = false
-
-document.getElementById("streak").innerText = "Current Streak: " + streak
-
-// Guess logic
-function check(){
-  if(guessed) return
-
-  let input = document.getElementById("guess").value.toLowerCase()
-
-  if(input === answer){
-    document.getElementById("result").innerText = "✅ Correct!"
-
-    if(lastPlayed === today){
-      // already counted today
-    } else if(lastPlayed === getYesterday()){
-      streak++
-    } else {
-      streak = 1
-    }
-
-    localStorage.setItem("streak", streak)
-    localStorage.setItem("lastPlayed", today)
-
-    document.getElementById("streak").innerText = "Current Streak: " + streak
-
-    guessed = true
-
-  } else {
-    document.getElementById("result").innerText =
-      "❌ Wrong! Hint: starts with '" + answer[0].toUpperCase() + "'"
-  }
+// DAILY
+function getToday(){
+  return new Date().toISOString().slice(0,10)
 }
 
-// Yesterday helper
+const today = getToday()
+const seed = today.replaceAll("-", "")
+const answer = players[seed % players.length]
+
+// STATE
+let attempts = 0
+const maxAttempts = 5
+let gameOver = false
+
+let streak = parseInt(localStorage.getItem("streak") || "0")
+let lastPlayed = localStorage.getItem("lastPlayed")
+
+document.getElementById("streak").innerText = "Streak: " + streak
+updateAttempts()
+
+// GUESS
+function check(){
+  if(gameOver) return
+
+  let input = document.getElementById("guess").value.toLowerCase().trim()
+  if(!input) return
+
+  attempts++
+
+  if(input === answer){
+    document.getElementById("result").innerText = "🎉 Correct!"
+    handleStreak(true)
+    endGame()
+  } else {
+    document.getElementById("result").innerText =
+      `❌ Wrong (${attempts}/${maxAttempts}) Hint: ${getHint()}`
+  }
+
+  if(attempts >= maxAttempts){
+    document.getElementById("result").innerText =
+      "💀 Game Over! Answer: " + answer
+    handleStreak(false)
+    endGame()
+  }
+
+  updateAttempts()
+}
+
+// HINT SYSTEM (DAHA İYİ)
+function getHint(){
+  if(attempts === 1) return "Starts with: " + answer[0].toUpperCase()
+  if(attempts === 2) return "Ends with: " + answer.slice(-1).toUpperCase()
+  if(attempts === 3) return "Length: " + answer.length
+  return "Think harder 😄"
+}
+
+// ATTEMPTS UI
+function updateAttempts(){
+  document.getElementById("attempts").innerText =
+    `Attempts: ${attempts}/${maxAttempts}`
+}
+
+// STREAK
+function handleStreak(win){
+  if(lastPlayed === today) return
+
+  if(win && lastPlayed === getYesterday()){
+    streak++
+  } else if(win){
+    streak = 1
+  } else {
+    streak = 0
+  }
+
+  localStorage.setItem("streak", streak)
+  localStorage.setItem("lastPlayed", today)
+
+  document.getElementById("streak").innerText = "Streak: " + streak
+}
+
 function getYesterday(){
   let d = new Date()
   d.setDate(d.getDate() - 1)
   return d.toISOString().slice(0,10)
 }
 
-// Share
+// END GAME
+function endGame(){
+  gameOver = true
+  document.getElementById("guess").disabled = true
+  startCountdown()
+}
+
+// COUNTDOWN
+function startCountdown(){
+  function update(){
+    let now = new Date()
+    let tomorrow = new Date()
+    tomorrow.setHours(24,0,0,0)
+
+    let diff = tomorrow - now
+    let hours = Math.floor(diff / 1000 / 60 / 60)
+
+    document.getElementById("timer").innerText =
+      "Next player in " + hours + "h"
+  }
+
+  update()
+  setInterval(update, 60000)
+}
+
+// SHARE
 function share(){
   navigator.clipboard.writeText(
     "DailyKickoff ⚽\n" +
-    "I guessed today's player!\n" +
+    `Attempts: ${attempts}\n` +
     "Play: https://www.dailykickoffgame.com"
   )
-  alert("Copied to clipboard!")
+  alert("Copied!")
 }
-
-// Countdown
-function countdown(){
-  let now = new Date()
-  let tomorrow = new Date()
-  tomorrow.setHours(24,0,0,0)
-
-  let diff = tomorrow - now
-  let hours = Math.floor(diff / 1000 / 60 / 60)
-
-  document.getElementById("timer").innerText =
-    "Next player in " + hours + "h"
-}
-
-countdown()
 
 </script>
 

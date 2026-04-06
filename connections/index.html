@@ -1,53 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connections – Daily Game</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connections – Daily Game</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #0f172a;
-      color: white;
-      padding: 40px;
-    }
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #0f172a;
+  color: white;
+}
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
+#words {
+  margin-top: 20px;
+}
 
-    #words {
-      margin-top: 20px;
-    }
+button {
+  padding: 10px;
+  margin: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    button {
-      padding: 10px 14px;
-      margin: 6px;
-      font-size: 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+.selected {
+  background: #22c55e;
+}
 
-    .selected {
-      background: #22c55e;
-      color: white;
-    }
+.correct {
+  background: #16a34a;
+}
 
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-    }
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
 
-    #timer {
-      margin-top: 30px;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-  </style>
+#timer {
+  margin-top: 20px;
+}
+</style>
 </head>
 
 <body>
@@ -57,6 +50,7 @@
 
 <div id="words"></div>
 <p id="result"></p>
+<p id="mistakes"></p>
 
 <button onclick="share()">Share</button>
 
@@ -64,13 +58,7 @@
 
 <script>
 
-// Daily seed
-function getDailySeed(){
-  const today = new Date().toISOString().slice(0,10)
-  return today.split("-").join("")
-}
-
-// Groups (expand later)
+// GROUPS
 const groups = [
   ["apple","banana","orange","grape"],
   ["car","bus","train","bike"],
@@ -78,94 +66,129 @@ const groups = [
   ["red","blue","green","yellow"]
 ]
 
-// Shuffle words daily
-const seed = getDailySeed()
-let allWords = groups.flat()
-
-allWords.sort(() => 0.5 - (seed % 10) / 10)
-
-// Render buttons
-function render(){
-  document.getElementById("words").innerHTML =
-    allWords.map(w => `<button onclick="pick('${w}')">${w}</button>`).join(" ")
-}
-
+// STATE
 let selected = []
 let foundGroups = 0
+let mistakes = 0
+const maxMistakes = 4
+let solvedWords = []
+let gameOver = false
 let resultGrid = ""
 
-// Pick logic
+// SHUFFLE
+function shuffle(array){
+  return array.sort(() => Math.random() - 0.5)
+}
+
+let allWords = shuffle(groups.flat())
+
+// RENDER
+function render(){
+  document.getElementById("words").innerHTML =
+    allWords.map(w => {
+      let classes = ""
+
+      if(selected.includes(w)) classes += "selected "
+      if(solvedWords.includes(w)) classes += "correct disabled"
+
+      return `<button class="${classes}" onclick="pick('${w}')">${w}</button>`
+    }).join("")
+}
+
+// PICK
 function pick(word){
+  if(gameOver) return
   if(selected.includes(word)) return
 
   selected.push(word)
-
-  highlight()
+  render()
 
   if(selected.length === 4){
     checkGroup()
   }
 }
 
-// Highlight selected
-function highlight(){
-  const buttons = document.querySelectorAll("#words button")
-
-  buttons.forEach(btn => {
-    if(selected.includes(btn.innerText)){
-      btn.classList.add("selected")
-    }
-  })
-}
-
-// Check group
+// CHECK
 function checkGroup(){
   let correct = groups.some(group =>
     selected.every(w => group.includes(w))
   )
 
   if(correct){
-    document.getElementById("result").innerText = "✅ Correct group!"
-    resultGrid += "🟩"
+    solvedWords.push(...selected)
     foundGroups++
+    resultGrid += "🟩"
+    document.getElementById("result").innerText = "✅ Correct group!"
   } else {
-    document.getElementById("result").innerText = "❌ Wrong group"
+    mistakes++
     resultGrid += "🟥"
+    document.getElementById("result").innerText = "❌ Wrong group"
   }
 
   selected = []
+  updateMistakes()
 
   if(foundGroups === 4){
-    document.getElementById("result").innerText = "🎉 You found all groups!"
+    endGame(true)
   }
+
+  if(mistakes >= maxMistakes){
+    endGame(false)
+  }
+
+  render()
 }
 
-// Share
+// MISTAKES UI
+function updateMistakes(){
+  document.getElementById("mistakes").innerText =
+    `Mistakes: ${mistakes} / ${maxMistakes}`
+}
+
+// END GAME
+function endGame(win){
+  gameOver = true
+
+  if(win){
+    document.getElementById("result").innerText = "🎉 You won!"
+  } else {
+    document.getElementById("result").innerText = "💀 Game Over"
+  }
+
+  startCountdown()
+}
+
+// COUNTDOWN (SADECE GAME OVER'DA)
+function startCountdown(){
+  function update(){
+    let now = new Date()
+    let tomorrow = new Date()
+    tomorrow.setHours(24,0,0,0)
+
+    let diff = tomorrow - now
+    let hours = Math.floor(diff / 1000 / 60 / 60)
+
+    document.getElementById("timer").innerText =
+      "Next game in " + hours + "h"
+  }
+
+  update()
+  setInterval(update, 60000)
+}
+
+// SHARE
 function share(){
   navigator.clipboard.writeText(
     "DailyKickoff ⚽\n" +
     resultGrid + "\n" +
     "Play: https://www.dailykickoffgame.com"
   )
-  alert("Copied to clipboard!")
+  alert("Copied!")
 }
 
-// Countdown
-function countdown(){
-  let now = new Date()
-  let tomorrow = new Date()
-  tomorrow.setHours(24,0,0,0)
-
-  let diff = tomorrow - now
-  let hours = Math.floor(diff / 1000 / 60 / 60)
-
-  document.getElementById("timer").innerText =
-    "Next game in " + hours + "h"
-}
-
-// Init
+// INIT
 render()
-countdown()
+updateMistakes()
 
 </script>
 

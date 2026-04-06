@@ -18,6 +18,10 @@
 <p id="score"></p>
 
 <script>
+ const seed = getDailySeed()
+const index = seed % players.length
+const answer = players[index]
+ 
  function getDailySeed(){
   const today = new Date().toISOString().slice(0,10)
   return today.split("-").join("")

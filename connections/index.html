@@ -1,196 +1,637 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connections – Daily Game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #0f172a;
-  color: white;
-}
+  <title>Connections Game - Play Daily Word Group Puzzle Online</title>
+  <meta name="description" content="Play Connections online for free. Find 4 related words in each group, test your logic, and come back daily for a new word puzzle challenge." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.dailykickoffgame.com/connections/" />
 
-#words {
-  margin-top: 20px;
-}
+  <meta property="og:title" content="Connections Game - Daily Word Group Puzzle" />
+  <meta property="og:description" content="Find 4 related words in each set and solve the daily Connections puzzle online." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.dailykickoffgame.com/connections/" />
+  <meta property="og:site_name" content="Daily Kickoff Game" />
 
-button {
-  padding: 10px;
-  margin: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Connections Game - Daily Word Group Puzzle" />
+  <meta name="twitter:description" content="Play a fun daily word association puzzle and group related words together." />
 
-.selected {
-  background: #22c55e;
-}
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --card: #111827;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #22c55e;
+      --accent-dark: #16a34a;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border: #334155;
+      --button: #e2e8f0;
+      --button-text: #0f172a;
+    }
 
-.correct {
-  background: #16a34a;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.disabled {
-  opacity: 0.4;
-  pointer-events: none;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
 
-#timer {
-  margin-top: 20px;
-}
-</style>
+    .container {
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 12px;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .game-shell {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1fr;
+      margin-top: 28px;
+    }
+
+    .panel {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .status-card {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .status-card strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-top: 4px;
+    }
+
+    #words {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .word-btn {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      background: var(--button);
+      color: var(--button-text);
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+      min-height: 64px;
+    }
+
+    .word-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .word-btn.selected {
+      background: var(--accent);
+      color: white;
+    }
+
+    .word-btn.correct {
+      background: var(--accent-dark);
+      color: white;
+      border-color: var(--accent-dark);
+    }
+
+    .word-btn.disabled {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .action-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: white;
+      color: #111827;
+    }
+
+    .action-btn.secondary {
+      background: #1e293b;
+      color: white;
+      border: 1px solid var(--border);
+    }
+
+    .message {
+      min-height: 28px;
+      margin-top: 14px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .message.good {
+      color: #4ade80;
+    }
+
+    .message.bad {
+      color: #fca5a5;
+    }
+
+    .mistake-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mistake-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #334155;
+      border: 1px solid #475569;
+    }
+
+    .mistake-dot.used {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .found-groups {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .found-group {
+      border-radius: 14px;
+      padding: 14px;
+      background: #14532d;
+      border: 1px solid #166534;
+    }
+
+    .found-group h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .found-group p {
+      margin: 0;
+      color: #dcfce7;
+    }
+
+    .content {
+      margin-top: 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .content h2 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+    }
+
+    .content p,
+    .content li {
+      color: var(--muted);
+    }
+
+    .content ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .related-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .related-links a {
+      color: white;
+      text-decoration: none;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 14px;
+    }
+
+    footer {
+      margin-top: 36px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .status-row {
+        grid-template-columns: 1fr;
+      }
+
+      #words {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .word-btn {
+        min-height: 58px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Game",
+    "name": "Connections Game",
+    "url": "https://www.dailykickoffgame.com/connections/",
+    "description": "A daily word grouping puzzle where players find sets of four related words.",
+    "applicationCategory": "Game",
+    "genre": ["Word Game", "Puzzle Game"],
+    "isAccessibleForFree": true,
+    "publisher": {
+      "@type": "Organization",
+      "name": "Daily Kickoff Game"
+    }
+  }
+  </script>
 </head>
-
 <body>
+  <div class="container">
+    <header>
+      <div class="eyebrow">Daily Word Puzzle</div>
+      <h1>Connections Game</h1>
+      <p class="intro">
+        Find groups of 4 related words and solve the puzzle before you run out of mistakes.
+        This Connections-style word game is built for quick thinking, pattern recognition, and daily replayability.
+      </p>
+    </header>
 
-<h1>Connections 🧠</h1>
-<p>Select 4 related words</p>
+    <main>
+      <section class="panel" aria-labelledby="game-title">
+        <h2 id="game-title" style="margin-top:0;">Play Connections Online</h2>
 
-<div id="words"></div>
-<p id="result"></p>
-<p id="mistakes"></p>
+        <div class="status-row">
+          <div class="status-card">
+            Selected
+            <strong><span id="selected-count">0</span> / 4</strong>
+          </div>
+          <div class="status-card">
+            Groups Found
+            <strong><span id="groups-found">0</span> / 4</strong>
+          </div>
+          <div class="status-card">
+            Next Puzzle
+            <strong id="timer">Available now</strong>
+          </div>
+        </div>
 
-<button onclick="share()">Share</button>
+        <p style="text-align:center; color: var(--muted); margin: 0 0 10px;">
+          Select 4 words that belong together.
+        </p>
 
-<p id="timer"></p>
+        <div id="words" aria-live="polite"></div>
 
-<script>
+        <div class="message" id="result" aria-live="polite"></div>
 
-// GROUPS
-const groups = [
-  ["apple","banana","orange","grape"],
-  ["car","bus","train","bike"],
-  ["dog","cat","lion","tiger"],
-  ["red","blue","green","yellow"]
-]
+        <div style="text-align:center; margin-top:8px;">
+          <div id="mistakes-label">Mistakes: 0 / 4</div>
+          <div class="mistake-dots" id="mistake-dots"></div>
+        </div>
 
-// STATE
-let selected = []
-let foundGroups = 0
-let mistakes = 0
-const maxMistakes = 4
-let solvedWords = []
-let gameOver = false
-let resultGrid = ""
+        <div class="controls">
+          <button class="action-btn secondary" id="clear-btn" type="button">Clear Selection</button>
+          <button class="action-btn secondary" id="shuffle-btn" type="button">Shuffle</button>
+          <button class="action-btn" id="share-btn" type="button">Share Result</button>
+        </div>
 
-// SHUFFLE
-function shuffle(array){
-  return array.sort(() => Math.random() - 0.5)
-}
+        <div class="found-groups" id="found-groups"></div>
+      </section>
 
-let allWords = shuffle(groups.flat())
+      <section class="content">
+        <div class="panel">
+          <h2>How to Play</h2>
+          <p>
+            Your goal is to discover 4 sets of connected words. Each set contains exactly 4 words that share a category,
+            pattern, or common idea. Choose carefully: too many wrong guesses and the round ends.
+          </p>
+        </div>
 
-// RENDER
-function render(){
-  document.getElementById("words").innerHTML =
-    allWords.map(w => {
-      let classes = ""
+        <div class="panel">
+          <h2>Why Players Love Connections Games</h2>
+          <p>
+            Word grouping games combine logic, vocabulary, and deduction in a format that is easy to start but hard to master.
+            They are ideal for players who enjoy short daily brain challenges, puzzle streaks, and games that can be shared with friends.
+          </p>
+        </div>
 
-      if(selected.includes(w)) classes += "selected "
-      if(solvedWords.includes(w)) classes += "correct disabled"
+        <div class="panel">
+          <h2>Tips to Improve</h2>
+          <ul>
+            <li>Look for obvious categories first, such as colors, animals, places, or objects.</li>
+            <li>When stuck, try spotting words with similar context instead of surface similarity.</li>
+            <li>Use process of elimination after one or two groups are solved.</li>
+            <li>Replay daily to improve pattern recognition and puzzle speed.</li>
+          </ul>
+        </div>
 
-      return `<button class="${classes}" onclick="pick('${w}')">${w}</button>`
-    }).join("")
-}
+        <div class="panel">
+          <h2>Play More Games</h2>
+          <p>Keep players moving across the site. This is critical for session depth.</p>
+          <div class="related-links">
+            <a href="/higher-lower/">Play Higher or Lower</a>
+            <a href="/pl-guesser/">Play Premier League Guesser</a>
+          </div>
+        </div>
+      </section>
+    </main>
 
-// PICK
-function pick(word){
-  if(gameOver) return
-  if(selected.includes(word)) return
+    <footer>
+      Daily Kickoff Game - Free daily browser games for puzzle and football fans.
+    </footer>
+  </div>
 
-  selected.push(word)
-  render()
+  <script>
+    const puzzleData = [
+      {
+        category: "Fruits",
+        words: ["apple", "banana", "orange", "grape"]
+      },
+      {
+        category: "Transport",
+        words: ["car", "bus", "train", "bike"]
+      },
+      {
+        category: "Animals",
+        words: ["dog", "cat", "lion", "tiger"]
+      },
+      {
+        category: "Colors",
+        words: ["red", "blue", "green", "yellow"]
+      }
+    ];
 
-  if(selected.length === 4){
-    checkGroup()
-  }
-}
+    let selected = [];
+    let foundGroups = 0;
+    let mistakes = 0;
+    const maxMistakes = 4;
+    let solvedWords = [];
+    let gameOver = false;
+    let resultGrid = "";
+    let foundCategoryData = [];
 
-// CHECK
-function checkGroup(){
-  let correct = groups.some(group =>
-    selected.every(w => group.includes(w))
-  )
+    function fisherYatesShuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
 
-  if(correct){
-    solvedWords.push(...selected)
-    foundGroups++
-    resultGrid += "🟩"
-    document.getElementById("result").innerText = "✅ Correct group!"
-  } else {
-    mistakes++
-    resultGrid += "🟥"
-    document.getElementById("result").innerText = "❌ Wrong group"
-  }
+    let allWords = fisherYatesShuffle(puzzleData.flatMap(group => group.words));
 
-  selected = []
-  updateMistakes()
+    const wordsEl = document.getElementById("words");
+    const resultEl = document.getElementById("result");
+    const mistakesLabelEl = document.getElementById("mistakes-label");
+    const selectedCountEl = document.getElementById("selected-count");
+    const groupsFoundEl = document.getElementById("groups-found");
+    const timerEl = document.getElementById("timer");
+    const mistakeDotsEl = document.getElementById("mistake-dots");
+    const foundGroupsEl = document.getElementById("found-groups");
+    const clearBtn = document.getElementById("clear-btn");
+    const shuffleBtn = document.getElementById("shuffle-btn");
+    const shareBtn = document.getElementById("share-btn");
 
-  if(foundGroups === 4){
-    endGame(true)
-  }
+    function renderMistakeDots() {
+      mistakeDotsEl.innerHTML = "";
+      for (let i = 0; i < maxMistakes; i++) {
+        const dot = document.createElement("div");
+        dot.className = "mistake-dot" + (i < mistakes ? " used" : "");
+        mistakeDotsEl.appendChild(dot);
+      }
+    }
 
-  if(mistakes >= maxMistakes){
-    endGame(false)
-  }
+    function renderFoundGroups() {
+      foundGroupsEl.innerHTML = foundCategoryData.map(item => `
+        <div class="found-group">
+          <h3>${item.category}</h3>
+          <p>${item.words.join(", ")}</p>
+        </div>
+      `).join("");
+    }
 
-  render()
-}
+    function renderWords() {
+      wordsEl.innerHTML = "";
 
-// MISTAKES UI
-function updateMistakes(){
-  document.getElementById("mistakes").innerText =
-    `Mistakes: ${mistakes} / ${maxMistakes}`
-}
+      allWords.forEach(word => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = word;
+        btn.className = "word-btn";
 
-// END GAME
-function endGame(win){
-  gameOver = true
+        if (selected.includes(word)) btn.classList.add("selected");
+        if (solvedWords.includes(word)) {
+          btn.classList.add("correct", "disabled");
+          btn.disabled = true;
+        }
 
-  if(win){
-    document.getElementById("result").innerText = "🎉 You won!"
-  } else {
-    document.getElementById("result").innerText = "💀 Game Over"
-  }
+        btn.addEventListener("click", () => pick(word));
+        wordsEl.appendChild(btn);
+      });
 
-  startCountdown()
-}
+      selectedCountEl.textContent = selected.length;
+      groupsFoundEl.textContent = foundGroups;
+      mistakesLabelEl.textContent = `Mistakes: ${mistakes} / ${maxMistakes}`;
+      renderMistakeDots();
+    }
 
-// COUNTDOWN (SADECE GAME OVER'DA)
-function startCountdown(){
-  function update(){
-    let now = new Date()
-    let tomorrow = new Date()
-    tomorrow.setHours(24,0,0,0)
+    function setMessage(text, type = "") {
+      resultEl.textContent = text;
+      resultEl.className = "message" + (type ? ` ${type}` : "");
+    }
 
-    let diff = tomorrow - now
-    let hours = Math.floor(diff / 1000 / 60 / 60)
+    function pick(word) {
+      if (gameOver) return;
 
-    document.getElementById("timer").innerText =
-      "Next game in " + hours + "h"
-  }
+      if (selected.includes(word)) {
+        selected = selected.filter(item => item !== word);
+        renderWords();
+        return;
+      }
 
-  update()
-  setInterval(update, 60000)
-}
+      if (selected.length >= 4) return;
 
-// SHARE
-function share(){
-  navigator.clipboard.writeText(
-    "DailyKickoff ⚽\n" +
-    resultGrid + "\n" +
-    "Play: https://www.dailykickoffgame.com"
-  )
-  alert("Copied!")
-}
+      selected.push(word);
+      renderWords();
 
-// INIT
-render()
-updateMistakes()
+      if (selected.length === 4) {
+        checkGroup();
+      }
+    }
 
-</script>
+    function checkGroup() {
+      const matchedGroup = puzzleData.find(group =>
+        selected.every(word => group.words.includes(word))
+      );
 
+      if (matchedGroup) {
+        solvedWords.push(...selected);
+        foundGroups++;
+        resultGrid += "🟩";
+        foundCategoryData.push(matchedGroup);
+        setMessage(`Correct! Category: ${matchedGroup.category}`, "good");
+      } else {
+        const almostMatch = puzzleData.some(group => {
+          const overlap = selected.filter(word => group.words.includes(word)).length;
+          return overlap === 3;
+        });
+
+        mistakes++;
+        resultGrid += "🟥";
+        setMessage(almostMatch ? "Close - one word away." : "Wrong group. Try a different connection.", "bad");
+      }
+
+      selected = [];
+      renderWords();
+      renderFoundGroups();
+
+      if (foundGroups === puzzleData.length) {
+        endGame(true);
+      } else if (mistakes >= maxMistakes) {
+        endGame(false);
+      }
+    }
+
+    function endGame(win) {
+      gameOver = true;
+
+      if (win) {
+        setMessage("You solved all groups. Great job!", "good");
+      } else {
+        setMessage("Game over. Come back for the next puzzle.", "bad");
+      }
+
+      startCountdown();
+    }
+
+    function startCountdown() {
+      function update() {
+        const now = new Date();
+        const tomorrow = new Date();
+        tomorrow.setHours(24, 0, 0, 0);
+
+        const diff = tomorrow - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        timerEl.textContent = `${hours}h ${minutes}m`;
+      }
+
+      update();
+      if (!window.__countdownStarted) {
+        window.__countdownStarted = true;
+        setInterval(update, 60000);
+      }
+    }
+
+    function shuffleUnsolvedWords() {
+      if (gameOver) return;
+
+      const unsolved = allWords.filter(word => !solvedWords.includes(word));
+      const solved = allWords.filter(word => solvedWords.includes(word));
+
+      const shuffledUnsolved = fisherYatesShuffle(unsolved);
+      allWords = [...solved, ...shuffledUnsolved];
+      renderWords();
+    }
+
+    async function share() {
+      const text =
+        `Daily Kickoff - Connections\n` +
+        `Result: ${resultGrid || "No groups solved yet"}\n` +
+        `Mistakes: ${mistakes}/${maxMistakes}\n` +
+        `Play: https://www.dailykickoffgame.com/connections/`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        setMessage("Result copied to clipboard.", "good");
+      } catch (error) {
+        setMessage("Could not copy result automatically.", "bad");
+      }
+    }
+
+    clearBtn.addEventListener("click", () => {
+      if (gameOver) return;
+      selected = [];
+      renderWords();
+      setMessage("");
+    });
+
+    shuffleBtn.addEventListener("click", shuffleUnsolvedWords);
+    shareBtn.addEventListener("click", share);
+
+    renderWords();
+    renderFoundGroups();
+    renderMistakeDots();
+    timerEl.textContent = "Today";
+  </script>
 </body>
 </html>

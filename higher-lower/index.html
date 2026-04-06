@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Higher Lower Game</title>
+</head>
+
+<body>
+
+<h1>Higher Lower 📈</h1>
+
+<p id="question"></p>
+
+<button onclick="guess('higher')">Higher</button>
+<button onclick="guess('lower')">Lower</button>
+
+<p id="result"></p>
+<p id="score"></p>
+
+<script>
+
+let score = 0
+
+function newRound(){
+ let a = Math.floor(Math.random()*100)
+ let b = Math.floor(Math.random()*100)
+
+ window.current = {a,b}
+
+ document.getElementById("question").innerText =
+  a + " vs " + b
+}
+
+function guess(type){
+ let {a,b} = window.current
+
+ if((type=="higher" && b>a) || (type=="lower" && b<a)){
+   score++
+   document.getElementById("result").innerText="Correct"
+ } else {
+   score=0
+   document.getElementById("result").innerText="Wrong"
+ }
+
+ document.getElementById("score").innerText="Score: "+score
+ newRound()
+}
+
+newRound()
+
+</script>
+
+</body>
+</html>

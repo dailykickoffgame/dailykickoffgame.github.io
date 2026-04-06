@@ -1,71 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <style>
-body{
- font-family:Arial;
- background:#0f172a;
- color:#fff;
- text-align:center;
- padding:40px;
-}
-
-h1{
- font-size:40px;
- margin-bottom:10px;
-}
-
-p{
- color:#cbd5e1;
-}
-
-a{
- display:block;
- margin:15px auto;
- padding:15px;
- max-width:300px;
- background:#1e293b;
- color:#fff;
- text-decoration:none;
- border-radius:12px;
- transition:0.2s;
-}
-
-a:hover{
- background:#334155;
- transform:scale(1.05);
-}
-</style>
-  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DailyKickoff Game Hub – Play Daily Football & Puzzle Games</title>
+<title>DailyKickoff ⚽ | Daily Football Games</title>
 
-<meta name="description" content="Play daily football guessing games, higher or lower quiz and connections puzzle. New challenges every day for soccer fans and puzzle lovers.">
+<meta name="description" content="Play daily football games: Connections, Higher or Lower, and Player Guess. New challenges every day!">
 
-<link rel="canonical" href="https://www.dailykickoffgame.com/">
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+}
 
+header {
+  padding:40px 20px;
+}
+
+h1 {
+  font-size:36px;
+}
+
+.subtitle {
+  opacity:0.7;
+}
+
+.container {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  padding:20px;
+  max-width:900px;
+  margin:auto;
+}
+
+.card {
+  background:#1e293b;
+  padding:20px;
+  border-radius:12px;
+  transition:0.2s;
+}
+
+.card:hover {
+  transform:scale(1.05);
+}
+
+button {
+  margin-top:15px;
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:#22c55e;
+  color:white;
+}
+
+footer {
+  margin-top:40px;
+  opacity:0.6;
+  font-size:14px;
+}
+</style>
 </head>
 
 <body>
 
-<h1>DailyKickoff Games 🎮</h1>
+<header>
+  <h1>DailyKickoff ⚽</h1>
+  <p class="subtitle">Play new football games every day</p>
+</header>
 
-<p>Welcome to DailyKickoffGame, your hub for daily football and puzzle games. Test your knowledge, challenge yourself and come back every day for a new game.</p>
+<div class="container">
 
-<h2>Play Daily Games</h2>
+  <div class="card">
+    <h2>🧠 Connections</h2>
+    <p>Find 4 related words</p>
+    <a href="connections/index.html">
+      <button>Play</button>
+    </a>
+  </div>
 
-<p>Choose a game below and start playing:</p>
+  <div class="card">
+    <h2>📈 Higher or Lower</h2>
+    <p>Guess which number is higher</p>
+    <a href="higher-lower/index.html">
+      <button>Play</button>
+    </a>
+  </div>
 
-<a href="/pl-guesser/">Play Premier League Player Guessing Game</a>
-<a href="/higher-lower/">Play Higher or Lower Football Quiz</a>
-<a href="/connections/">Play Connections Puzzle Game</a>
+  <div class="card">
+    <h2>⚽ Player Guesser</h2>
+    <p>Guess today's football player</p>
+    <a href="pl-guesser/index.html">
+      <button>Play</button>
+    </a>
+  </div>
 
-<h2>Why Play DailyKickoffGame?</h2>
+</div>
 
-<p>Our platform offers fun and challenging daily guessing games focused on football and logic puzzles. Each game resets every day, giving you a new challenge to solve.</p>
+<footer>
+  <p>New games daily • Challenge your football knowledge</p>
+</footer>
 
 </body>
 </html>

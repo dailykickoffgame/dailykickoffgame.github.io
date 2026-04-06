@@ -1,15 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - DailyKickoffGame</title>
-    <meta name="description" content="Learn more about DailyKickoffGame, a platform for daily puzzle and guessing games.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>About Daily Kickoff Game</title>
+  <meta name="description" content="Learn about Daily Kickoff Game, a free browser-based site for daily football quizzes, word puzzles, and replayable mini games." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.dailykickoffgame.com/about.html" />
+
+  <meta property="og:title" content="About Daily Kickoff Game" />
+  <meta property="og:description" content="Find out what Daily Kickoff Game is, who it is for, and how the site approaches daily football and puzzle games." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.dailykickoffgame.com/about.html" />
+  <meta property="og:site_name" content="Daily Kickoff Game" />
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --soft: #1e293b;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --border: #334155;
+      --accent: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .container {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .top-link {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .top-link:hover {
+      color: white;
+    }
+
+    .hero {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: #86efac;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
+    p {
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .links a {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 14px;
+    }
+
+    .links a:hover {
+      border-color: #475569;
+    }
+
+    footer {
+      margin-top: 30px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <a class="top-link" href="/">← Back to Home</a>
 
-    <h1>About</h1>
-    <p>DailyKickoffGame is a platform for daily puzzle and guessing games.</p>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">About the Site</div>
+        <h1>About Daily Kickoff Game</h1>
+        <p>
+          Daily Kickoff Game is a free browser-based game site focused on short, replayable daily challenges.
+          The goal is simple: create games that are quick to start, easy to understand, and fun to return to.
+        </p>
+        <p>
+          The site currently combines football-themed quiz games and light puzzle experiences, making it a good fit
+          for players who enjoy both sports knowledge and fast brain challenges.
+        </p>
+      </section>
 
+      <section class="grid">
+        <article class="card">
+          <h2>What You Can Play</h2>
+          <p>Daily Kickoff Game currently includes a small set of browser games built around repeat visits and daily play.</p>
+          <ul>
+            <li><strong>Connections</strong> - a word grouping puzzle based on finding related sets.</li>
+            <li><strong>Higher or Lower</strong> - a fast comparison game built around football-related stats and values.</li>
+            <li><strong>PL Guesser</strong> - a daily football guessing game focused on Premier League players.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>What the Site Aims to Do</h2>
+          <p>
+            The site is being built around a few core ideas rather than a huge number of low-quality games.
+          </p>
+          <ul>
+            <li>Fast loading and easy browser access</li>
+            <li>Simple rules with replay value</li>
+            <li>Daily challenge formats that encourage return visits</li>
+            <li>Clear, mobile-friendly design</li>
+            <li>Free access without downloads</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="card" style="margin-top:18px;">
+        <h2>Who It Is For</h2>
+        <p>
+          Daily Kickoff Game is designed for players who want lightweight online games they can open instantly on desktop or mobile.
+          Some visitors may be more interested in football quizzes and player knowledge, while others may prefer logic, word, and comparison games.
+        </p>
+        <p>
+          Instead of trying to be a massive game portal, the site focuses on a smaller set of experiences that can be improved over time.
+        </p>
+      </section>
+
+      <section class="card" style="margin-top:18px;">
+        <h2>Ongoing Development</h2>
+        <p>
+          The site is actively evolving. Game mechanics, daily challenge systems, design improvements, and usability features may change over time
+          as the platform grows.
+        </p>
+        <p>
+          The long-term aim is to make Daily Kickoff Game a stronger destination for browser-based daily games with better replayability,
+          clearer content, and more polished user experience.
+        </p>
+      </section>
+
+      <section class="card" style="margin-top:18px;">
+        <h2>Useful Links</h2>
+        <div class="links">
+          <a href="/">Home</a>
+          <a href="/connections/">Connections</a>
+          <a href="/higher-lower/">Higher or Lower</a>
+          <a href="/pl-guesser/">PL Guesser</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/privacy-policy.html">Privacy Policy</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Daily Kickoff Game - Free football and puzzle games in your browser.
+    </footer>
+  </div>
 </body>
 </html>

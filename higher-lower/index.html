@@ -27,11 +27,13 @@ const answer = players[index]
   return today.split("-").join("")
 }
 
-let score = 0
+const data = [12,45,78,23,67,89,34,56]
 
-function newRound(){
- let a = Math.floor(Math.random()*100)
- let b = Math.floor(Math.random()*100)
+const seed = getDailySeed()
+let index = seed % data.length
+
+let a = data[index]
+let b = data[(index+1) % data.length]
 
  window.current = {a,b}
 

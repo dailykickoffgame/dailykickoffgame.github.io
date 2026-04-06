@@ -44,14 +44,9 @@ function check(){
 
  if(input === answer){
    document.getElementById("result").innerText = "Correct!"
-
-   if(lastPlayed !== today){
-     streak++
-     localStorage.setItem("streak", streak)
-     localStorage.setItem("lastPlayed", today)
-   }
  } else {
-   document.getElementById("result").innerText = "Wrong!"
+   document.getElementById("result").innerText =
+     "Wrong! Hint: starts with " + answer[0]
  }
 }
 

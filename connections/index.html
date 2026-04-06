@@ -1,39 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connections – Daily Game</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #0f172a;
+      color: white;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    #words {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 14px;
+      margin: 6px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .selected {
+      background: #22c55e;
+      color: white;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      margin-top: 30px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
 <body>
 
 <h1>Connections 🧠</h1>
-
 <p>Select 4 related words</p>
 
 <div id="words"></div>
 <p id="result"></p>
 
+<button onclick="share()">Share</button>
+
+<p id="timer"></p>
+
 <script>
- const seed = getDailySeed()
-const index = seed % players.length
-const answer = players[index]
- 
- function getDailySeed(){
+
+// Daily seed
+function getDailySeed(){
   const today = new Date().toISOString().slice(0,10)
   return today.split("-").join("")
 }
 
-let words = ["apple","banana","car","bus","dog","cat","red","blue"]
+// Groups (expand later)
+const groups = [
+  ["apple","banana","orange","grape"],
+  ["car","bus","train","bike"],
+  ["dog","cat","lion","tiger"],
+  ["red","blue","green","yellow"]
+]
 
-document.getElementById("words").innerHTML =
- words.map(w=>`<button onclick="pick('${w}')">${w}</button>`).join(" ")
+// Shuffle words daily
+const seed = getDailySeed()
+let allWords = groups.flat()
 
-let selected=[]
+allWords.sort(() => 0.5 - (seed % 10) / 10)
 
-function pick(w){
- selected.push(w)
-
- if(selected.length==4){
-   document.getElementById("result").innerText="Try grouping!"
-   selected=[]
- }
+// Render buttons
+function render(){
+  document.getElementById("words").innerHTML =
+    allWords.map(w => `<button onclick="pick('${w}')">${w}</button>`).join(" ")
 }
+
+let selected = []
+let foundGroups = 0
+let resultGrid = ""
+
+// Pick logic
+function pick(word){
+  if(selected.includes(word)) return
+
+  selected.push(word)
+
+  highlight()
+
+  if(selected.length === 4){
+    checkGroup()
+  }
+}
+
+// Highlight selected
+function highlight(){
+  const buttons = document.querySelectorAll("#words button")
+
+  buttons.forEach(btn => {
+    if(selected.includes(btn.innerText)){
+      btn.classList.add("selected")
+    }
+  })
+}
+
+// Check group
+function checkGroup(){
+  let correct = groups.some(group =>
+    selected.every(w => group.includes(w))
+  )
+
+  if(correct){
+    document.getElementById("result").innerText = "✅ Correct group!"
+    resultGrid += "🟩"
+    foundGroups++
+  } else {
+    document.getElementById("result").innerText = "❌ Wrong group"
+    resultGrid += "🟥"
+  }
+
+  selected = []
+
+  if(foundGroups === 4){
+    document.getElementById("result").innerText = "🎉 You found all groups!"
+  }
+}
+
+// Share
+function share(){
+  navigator.clipboard.writeText(
+    "DailyKickoff ⚽\n" +
+    resultGrid + "\n" +
+    "Play: https://www.dailykickoffgame.com"
+  )
+  alert("Copied to clipboard!")
+}
+
+// Countdown
+function countdown(){
+  let now = new Date()
+  let tomorrow = new Date()
+  tomorrow.setHours(24,0,0,0)
+
+  let diff = tomorrow - now
+  let hours = Math.floor(diff / 1000 / 60 / 60)
+
+  document.getElementById("timer").innerText =
+    "Next game in " + hours + "h"
+}
+
+// Init
+render()
+countdown()
 
 </script>
 

@@ -1,133 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Higher or Lower</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Higher or Lower</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #0f172a;
-      color: white;
-      padding: 40px;
-    }
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #0f172a;
+  color: white;
+}
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
+#question {
+  font-size: 28px;
+  margin: 30px 0;
+}
 
-    p {
-      font-size: 18px;
-    }
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    #question {
-      font-size: 28px;
-      margin: 30px 0;
-    }
+.higher { background: #22c55e; }
+.lower { background: #ef4444; }
 
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .higher {
-      background: #22c55e;
-      color: white;
-    }
-
-    .lower {
-      background: #ef4444;
-      color: white;
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 20px;
-    }
-
-    #score {
-      margin-top: 10px;
-      font-size: 18px;
-    }
-
-    #timer {
-      margin-top: 30px;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-  </style>
+#timer { margin-top: 20px; }
+</style>
 </head>
 
 <body>
 
-  <h1>Higher or Lower</h1>
-  <p>Guess which number is higher</p>
+<h1>Higher or Lower</h1>
+<p>Guess which number is higher</p>
 
-  <div id="question"></div>
+<div id="question"></div>
 
-  <button class="higher" onclick="guess('higher')">Higher</button>
-  <button class="lower" onclick="guess('lower')">Lower</button>
+<button class="higher" onclick="guess('higher')">Higher</button>
+<button class="lower" onclick="guess('lower')">Lower</button>
 
-  <div id="result"></div>
-  <div id="score"></div>
+<div id="result"></div>
+<div id="score"></div>
 
-  <button onclick="share()">Share</button>
+<button onclick="share()">Share</button>
 
-  <p id="timer"></p>
+<p id="timer"></p>
 
 <script>
 
-function getDailySeed(){
-  const today = new Date().toISOString().slice(0,10)
-  return today.split("-").join("")
-}
-
-// Data (you should expand this later)
+// DATA
 const data = [12,45,78,23,67,89,34,56,91,5,38,72,60,15,44,83]
 
-// Daily selection
-const seed = getDailySeed()
-let index = seed % data.length
-
-let a = data[index]
-let b = data[(index+1) % data.length]
-
-// Game state
+// STATE
+let current = null
+let next = null
 let score = 0
-let resultGrid = ""
 let gameOver = false
+let resultGrid = ""
 
-function newRound(){
-  document.getElementById("question").innerText = a + " vs " + b
+// RANDOM PICK
+function getRandom(){
+  return data[Math.floor(Math.random() * data.length)]
 }
 
-// Guess logic
+// NEW ROUND
+function newRound(){
+  if(current === null){
+    current = getRandom()
+  } else {
+    current = next
+  }
+
+  do {
+    next = getRandom()
+  } while(next === current)
+
+  document.getElementById("question").innerText =
+    current + " vs " + next
+}
+
+// GUESS
 function guess(type){
   if(gameOver) return
 
-  const correct = (type === "higher" && b > a) || (type === "lower" && b < a)
+  const correct =
+    (type === "higher" && next > current) ||
+    (type === "lower" && next < current)
 
   if(correct){
     score++
     resultGrid += "🟩"
-    document.getElementById("result").innerText = "✅ Correct guess!"
+    document.getElementById("result").innerText = "✅ Correct!"
+    newRound()
   } else {
     resultGrid += "🟥"
-    document.getElementById("result").innerText = "❌ Wrong guess!"
-    gameOver = true
+    document.getElementById("result").innerText = "💀 Game Over"
+    endGame()
   }
 
-  document.getElementById("score").innerText = "Current Score: " + score
+  document.getElementById("score").innerText =
+    "Score: " + score
 }
 
-// Share
+// END GAME
+function endGame(){
+  gameOver = true
+  startCountdown()
+}
+
+// COUNTDOWN (SADECE SONDA)
+function startCountdown(){
+  function update(){
+    let now = new Date()
+    let tomorrow = new Date()
+    tomorrow.setHours(24,0,0,0)
+
+    let diff = tomorrow - now
+    let hours = Math.floor(diff / 1000 / 60 / 60)
+
+    document.getElementById("timer").innerText =
+      "Next game in " + hours + "h"
+  }
+
+  update()
+  setInterval(update, 60000)
+}
+
+// SHARE
 function share(){
   navigator.clipboard.writeText(
     "DailyKickoff ⚽\n" +
@@ -135,26 +137,12 @@ function share(){
     "Score: " + score + "\n" +
     "Play: https://www.dailykickoffgame.com"
   )
-  alert("Copied to clipboard!")
+  alert("Copied!")
 }
 
-// Countdown
-function countdown(){
-  let now = new Date()
-  let tomorrow = new Date()
-  tomorrow.setHours(24,0,0,0)
-
-  let diff = tomorrow - now
-
-  let hours = Math.floor(diff / 1000 / 60 / 60)
-
-  document.getElementById("timer").innerText =
-    "Next game in " + hours + "h"
-}
-
-// Init
+// INIT
 newRound()
-countdown()
+document.getElementById("score").innerText = "Score: 0"
 
 </script>
 

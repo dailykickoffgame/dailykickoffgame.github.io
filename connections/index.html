@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Connections 🧠</h1>
+
+<p>Select 4 related words</p>
+
+<div id="words"></div>
+<p id="result"></p>
+
+<script>
+
+let words = ["apple","banana","car","bus","dog","cat","red","blue"]
+
+document.getElementById("words").innerHTML =
+ words.map(w=>`<button onclick="pick('${w}')">${w}</button>`).join(" ")
+
+let selected=[]
+
+function pick(w){
+ selected.push(w)
+
+ if(selected.length==4){
+   document.getElementById("result").innerText="Try grouping!"
+   selected=[]
+ }
+}
+
+</script>
+
+</body>
+</html>

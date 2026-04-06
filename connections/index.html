@@ -10,6 +10,10 @@
 <p id="result"></p>
 
 <script>
+ function getDailySeed(){
+  const today = new Date().toISOString().slice(0,10)
+  return today.split("-").join("")
+}
 
 let words = ["apple","banana","car","bus","dog","cat","red","blue"]
 

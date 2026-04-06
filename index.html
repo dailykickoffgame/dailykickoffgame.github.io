@@ -1,110 +1,579 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>DailyKickoff ⚽ | Daily Football Games</title>
+  <title>Daily Kickoff Game - Play Daily Football & Word Games Online</title>
+  <meta name="description" content="Play free daily browser games at Daily Kickoff Game. Try Connections, Higher or Lower, and Player Guesser with new daily challenges for football and puzzle fans." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.dailykickoffgame.com/" />
 
-<meta name="description" content="Play daily football games: Connections, Higher or Lower, and Player Guess. New challenges every day!">
+  <meta property="og:title" content="Daily Kickoff Game - Daily Football & Puzzle Games" />
+  <meta property="og:description" content="Play free daily games online, including Connections, Higher or Lower, and Player Guesser." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.dailykickoffgame.com/" />
+  <meta property="og:site_name" content="Daily Kickoff Game" />
 
-<style>
-body {
-  margin:0;
-  font-family: Arial;
-  background:#0f172a;
-  color:white;
-  text-align:center;
-}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Daily Kickoff Game - Daily Football & Puzzle Games" />
+  <meta name="twitter:description" content="Free daily online games for football fans and puzzle lovers." />
 
-header {
-  padding:40px 20px;
-}
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --panel: #111827;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #22c55e;
+      --accent-dark: #16a34a;
+      --border: #334155;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+    }
 
-h1 {
-  font-size:36px;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.subtitle {
-  opacity:0.7;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.container {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  padding:20px;
-  max-width:900px;
-  margin:auto;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-.card {
-  background:#1e293b;
-  padding:20px;
-  border-radius:12px;
-  transition:0.2s;
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-.card:hover {
-  transform:scale(1.05);
-}
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+    }
 
-button {
-  margin-top:15px;
-  padding:10px 16px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  background:#22c55e;
-  color:white;
-}
+    .topbar {
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
 
-footer {
-  margin-top:40px;
-  opacity:0.6;
-  font-size:14px;
-}
-</style>
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav a:hover {
+      color: white;
+    }
+
+    .hero {
+      padding: 56px 0 28px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: #86efac;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.06rem;
+      max-width: 720px;
+      margin: 0 0 22px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border-color: var(--border);
+    }
+
+    .hero-panel {
+      background: rgba(17, 24, 39, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mini-item {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .mini-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .section {
+      padding: 26px 0;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+    }
+
+    .section-subtitle {
+      margin: 0 0 20px;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      transition: transform 0.18s ease, border-color 0.18s ease;
+      text-align: left;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: #475569;
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      font-size: 0.82rem;
+      color: #d1fae5;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-box {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .stat-box strong {
+      display: block;
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .content-box {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .content-box h3 {
+      margin-top: 0;
+    }
+
+    .content-box p,
+    .content-box li {
+      color: var(--muted);
+    }
+
+    .content-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .faq {
+      display: grid;
+      gap: 14px;
+    }
+
+    .faq details {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .faq p {
+      color: var(--muted);
+      margin: 10px 0 0;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin-top: 28px;
+      padding: 28px 0 40px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .games-grid,
+      .stats-grid,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Daily Kickoff Game",
+    "url": "https://www.dailykickoffgame.com/",
+    "description": "Free daily browser games featuring football quizzes, player guessing, and puzzle games.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Daily Kickoff Game"
+    }
+  }
+  </script>
 </head>
-
 <body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Daily Kickoff Game ⚽</div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/connections/">Connections</a>
+        <a href="/higher-lower/">Higher or Lower</a>
+        <a href="/pl-guesser/">Player Guesser</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-<header>
-  <h1>DailyKickoff ⚽</h1>
-  <p class="subtitle">Play new football games every day</p>
-</header>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Free Daily Browser Games</div>
+          <h1>Play Daily Football and Puzzle Games Online</h1>
+          <p>
+            Daily Kickoff Game brings together quick, replayable browser games for football fans
+            and puzzle lovers. Challenge yourself with daily word grouping, number comparison,
+            and football player guessing games designed for short sessions and repeat visits.
+          </p>
 
-<div class="container">
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/connections/">Play Connections</a>
+            <a class="btn btn-secondary" href="#games">Browse All Games</a>
+          </div>
+        </div>
 
-  <div class="card">
-    <h2>🧠 Connections</h2>
-    <p>Find 4 related words</p>
-    <a href="connections/index.html">
-      <button>Play</button>
-    </a>
-  </div>
+        <aside class="hero-panel" aria-label="Featured daily games">
+          <h2>Today's Featured Games</h2>
+          <div class="mini-list">
+            <div class="mini-item">
+              <strong>Connections</strong>
+              Group 4 related words and solve the puzzle before you run out of mistakes.
+            </div>
+            <div class="mini-item">
+              <strong>Higher or Lower</strong>
+              Make fast decisions and guess which stat, value, or number is higher.
+            </div>
+            <div class="mini-item">
+              <strong>Player Guesser</strong>
+              Test your football knowledge and identify today's mystery player.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
 
-  <div class="card">
-    <h2>📈 Higher or Lower</h2>
-    <p>Guess which number is higher</p>
-    <a href="higher-lower/index.html">
-      <button>Play</button>
-    </a>
-  </div>
+    <section class="section" id="games">
+      <div class="container">
+        <h2 class="section-title">Choose Your Daily Challenge</h2>
+        <p class="section-subtitle">
+          Every game is built for quick play, high replay value, and easy sharing.
+          Start with the challenge that matches your style.
+        </p>
 
-  <div class="card">
-    <h2>⚽ Player Guesser</h2>
-    <p>Guess today's football player</p>
-    <a href="pl-guesser/index.html">
-      <button>Play</button>
-    </a>
-  </div>
+        <div class="games-grid">
+          <article class="card">
+            <div class="card-icon">🧠</div>
+            <h3>Connections</h3>
+            <p>
+              Find 4 related words in each group and solve a logic-driven daily puzzle.
+              Best for players who enjoy pattern recognition and wordplay.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Word Puzzle</span>
+              <span class="tag">Daily Challenge</span>
+              <span class="tag">Brain Game</span>
+            </div>
+            <a class="btn btn-primary" href="/connections/">Play Connections</a>
+          </article>
 
-</div>
+          <article class="card">
+            <div class="card-icon">📈</div>
+            <h3>Higher or Lower</h3>
+            <p>
+              Compare stats, numbers, or rankings and decide which side comes out on top.
+              Great for fast rounds and competitive streak chasing.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Quick Game</span>
+              <span class="tag">Stat Quiz</span>
+              <span class="tag">Replayable</span>
+            </div>
+            <a class="btn btn-primary" href="/higher-lower/">Play Higher or Lower</a>
+          </article>
 
-<footer>
-  <p>New games daily • Challenge your football knowledge</p>
-</footer>
+          <article class="card">
+            <div class="card-icon">⚽</div>
+            <h3>Player Guesser</h3>
+            <p>
+              Use football knowledge, clues, and logic to identify the featured player.
+              Ideal for fans who follow the Premier League and world football.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Football Quiz</span>
+              <span class="tag">Player Trivia</span>
+              <span class="tag">Daily Guess</span>
+            </div>
+            <a class="btn btn-primary" href="/pl-guesser/">Play Player Guesser</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Why Daily Kickoff Game Works</h2>
+        <p class="section-subtitle">
+          A good game site is not just about clicks. It needs replay value, clear design,
+          fast loading, and challenges players want to return to tomorrow.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <strong>3</strong>
+            Core games
+          </div>
+          <div class="stat-box">
+            <strong>Daily</strong>
+            New challenges
+          </div>
+          <div class="stat-box">
+            <strong>Free</strong>
+            Browser-based play
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container two-col">
+        <div class="content-box">
+          <h3>Who These Games Are For</h3>
+          <p>
+            This site is built for players who want short, satisfying challenges without downloads,
+            signups, or clutter. Whether you enjoy football trivia, number comparisons, or word puzzles,
+            Daily Kickoff Game gives you something new to play in seconds.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <h3>Best Ways to Grow Your Score</h3>
+          <ul>
+            <li>Start with the game type you already understand best.</li>
+            <li>Come back each day to build familiarity and speed.</li>
+            <li>Share results with friends to create competition.</li>
+            <li>Switch between games to keep sessions longer and more varied.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Are the games free to play?</summary>
+            <p>Yes. All games on Daily Kickoff Game are free to play in your browser.</p>
+          </details>
+
+          <details>
+            <summary>Do the challenges change every day?</summary>
+            <p>That is the goal of the site. Each core game is designed around daily replayable challenges.</p>
+          </details>
+
+          <details>
+            <summary>Do I need to download anything?</summary>
+            <p>No. The site is designed for instant browser play on desktop and mobile.</p>
+          </details>
+
+          <details>
+            <summary>Which game should I start with?</summary>
+            <p>If you like word puzzles, start with Connections. If you prefer football knowledge, try Player Guesser. If you want quick decisions, Higher or Lower is the fastest entry point.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div><strong>Daily Kickoff Game</strong> - Free daily football and puzzle games.</div>
+      <div class="footer-links">
+        <a href="/connections/">Connections</a>
+        <a href="/higher-lower/">Higher or Lower</a>
+        <a href="/pl-guesser/">Player Guesser</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
